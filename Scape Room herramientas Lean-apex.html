@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escape Room: Cadena de Suministro Lean - Apex Logistics</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Poppins & Share Tech Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        mono: ['Share Tech Mono', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Animación suave para transiciones de pantalla */
+        .fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Estilos específicos de impresión para el certificado */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #certificate-print-area, #certificate-print-area * {
+                visibility: visible;
+            }
+            #certificate-print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background: white !important;
+                color: black !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen transition-colors duration-300">
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <div class="max-w-7xl mx-auto p-4 md:p-6 flex flex-col min-h-screen">
+        
+        <!-- HEADER INSTITUCIONAL -->
+        <header class="bg-slate-900/80 dark:bg-slate-900/80 border border-slate-800 rounded-2xl p-5 mb-6 backdrop-blur-md shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 transition-colors duration-300">
+            <div class="flex items-center gap-5">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtK-l1sSEFvatDEnFBLU4tVSxge2SOueyoTw&s" alt="Logo Institucional" class="h-20 w-auto object-contain rounded-lg border border-slate-700 bg-white p-1">
+                <div>
+                    <h2 class="text-sm uppercase tracking-widest text-emerald-400 font-bold font-mono">Licenciatura en Logística</h2>
+                    <h1 class="text-xl md:text-2xl font-extrabold text-slate-100 dark:text-white">Administración de la Producción y Mantenimiento</h1>
+                    <p class="text-sm text-slate-400">Profesor: <span class="text-slate-300 font-semibold">Licda. Dilsa J. González V.</span></p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <!-- Selector de Sonido -->
+                <button onclick="toggleAmbientSound()" id="sound-toggle-btn" class="p-3 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition font-mono text-sm" title="Activar/Desactivar sonido ambiente">
+                    <span id="sound-icon">🔈 Sonido Apagado</span>
+                </button>
+                <!-- Selector de Tema (Claro / Oscuro) -->
+                <button onclick="toggleTheme()" class="p-3 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition font-mono text-sm" title="Cambiar tema">
+                    <span class="dark:block hidden">☀️ Modo Claro</span>
+                    <span class="dark:hidden block">🌙 Modo Oscuro</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- PANTALLA 1: PORTADA / INTRODUCCIÓN -->
+        <section id="screen-portada" class="fade-in flex-grow flex flex-col justify-center items-center py-6">
+            <div class="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-3xl p-8 md:p-12 max-w-3xl w-full text-center shadow-2xl relative overflow-hidden">
+                <div class="absolute -right-20 -top-20 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl"></div>
+                <div class="absolute -left-20 -bottom-20 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl"></div>
+                
+                <span class="px-4 py-1.5 rounded-full text-sm font-mono font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 uppercase tracking-widest">Digital Escape Room</span>
+                <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight mt-6 text-white">Desafío Apex Logistics</h2>
+                <h3 class="text-xl text-emerald-400 font-semibold mt-3">Gestión Lean en la Cadena de Suministro</h3>
+                
+                <p class="text-slate-300 text-base md:text-lg leading-relaxed mt-6">
+                    Estimado Ingeniero de Logística: Los flujos de valor en la planta global de <strong>Apex Logistics</strong> se han congelado debido a una acumulación alarmante de derroches, procesos redundantes y falta de alineación organizacional. 
+                    Su misión es adentrarse en la planta, resolver los <strong>4 enigmas operacionales</strong> de cada estación, recolectar la contraseña de 4 dígitos de la bóveda de control y realizar la auditoría final.
+                </p>
+
+                <div class="mt-8 bg-slate-900/50 p-6 rounded-2xl border border-slate-800 text-left">
+                    <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3">🛠️ Estructura del Reto:</h4>
+                    <ul class="text-sm md:text-base text-slate-300 space-y-2 list-disc pl-5">
+                        <li>Explore las <strong>4 estaciones de trabajo</strong> haciendo clic en ellas en el mapa de planta.</li>
+                        <li>Resuelva la secuencia completa de <strong>4 retos operacionales</strong> en cada estación para obtener su dígito.</li>
+                        <li>Introduzca los 4 dígitos recopilados en la consola central del <strong>Master Vault</strong>.</li>
+                        <li>Complete la <strong>Auditoría de Mejora Continua (10 reactivos)</strong> para generar su Certificado Oficial en formato PDF.</li>
+                    </ul>
+                </div>
+
+                <!-- Entrada de datos del estudiante -->
+                <div class="mt-8 max-w-md mx-auto">
+                    <label for="student-name" class="block text-xs font-bold text-slate-400 text-left uppercase tracking-wider mb-2">Nombre completo del Estudiante:</label>
+                    <input type="text" id="student-name" placeholder="Ej. Juan Pérez" class="w-full px-5 py-4 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition text-center font-semibold text-lg">
+                    <p id="name-warning" class="text-sm text-rose-400 mt-2 hidden">⚠️ Por favor, ingrese su nombre para poder registrar el certificado.</p>
+                </div>
+
+                <button onclick="startGame()" class="mt-8 w-full md:w-auto px-12 py-5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold rounded-xl shadow-lg hover:shadow-emerald-500/20 transform hover:-translate-y-0.5 transition font-mono tracking-wider uppercase text-base">
+                    Infiltrar Planta ⚡
+                </button>
+            </div>
+        </section>
+
+        <!-- PANTALLA 2: MAPA DE LA PLANTA / ESCAPE ROOM -->
+        <section id="screen-escape" class="fade-in flex-grow hidden grid grid-cols-1 lg:grid-cols-12 gap-6 py-4">
+            
+            <!-- PANEL DE CONTROL IZQUIERDO: OBJETIVOS E INVENTARIO -->
+            <div class="lg:col-span-4 flex flex-col gap-4">
+                
+                <!-- ESTADO DE LA MISIÓN -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
+                    <div class="absolute right-4 top-4 flex items-center gap-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-lg text-xs font-mono font-bold">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span> ACTIVO
+                    </div>
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest font-mono mb-4">Información de Operación</h3>
+                    <div class="text-base font-semibold text-slate-300">Estudiante: <span id="display-student-name" class="text-white font-bold">---</span></div>
+                    
+                    <!-- CRONÓMETRO -->
+                    <div class="mt-4 flex items-center justify-between p-4 bg-slate-950 rounded-xl border border-slate-800">
+                        <span class="text-xs font-bold text-slate-400 font-mono">TIEMPO TRANSCURRIDO:</span>
+                        <span id="game-timer" class="text-2xl font-bold font-mono text-emerald-400 animate-pulse">00:00</span>
+                    </div>
+
+                    <!-- BARRA DE COMPLEMENTO DE MAPA -->
+                    <div class="mt-4">
+                        <div class="flex justify-between text-xs font-bold mb-1.5">
+                            <span class="text-slate-400">ÁREAS ESTABILIZADAS:</span>
+                            <span id="areas-count" class="text-emerald-400">0 / 4</span>
+                        </div>
+                        <div class="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+                            <div id="areas-progress-bar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CÓDIGOS DE ACCESO ENCONTRADOS -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex-grow">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest font-mono mb-4">CONSOLA DE FRAGMENTOS (4 DÍGITOS)</h3>
+                    <p class="text-xs text-slate-400 mb-4">Resuelva los enigmas de cada estación para registrar los fragmentos requeridos para abrir el Master Vault.</p>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div id="frag-1" class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-center flex flex-col justify-center items-center gap-1">
+                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">F1: SMED / JIDOKA</span>
+                            <span class="text-2xl font-mono font-bold text-slate-600 block" id="frag-val-1">❓</span>
+                        </div>
+                        <div id="frag-2" class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-center flex flex-col justify-center items-center gap-1">
+                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">F2: KANBAN / PULL</span>
+                            <span class="text-2xl font-mono font-bold text-slate-600 block" id="frag-val-2">❓</span>
+                        </div>
+                        <div id="frag-3" class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-center flex flex-col justify-center items-center gap-1">
+                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">F3: VSM / DERROCHES</span>
+                            <span class="text-2xl font-mono font-bold text-slate-600 block" id="frag-val-3">❓</span>
+                        </div>
+                        <div id="frag-4" class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-center flex flex-col justify-center items-center gap-1">
+                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">F4: MA / POKA-YOKE</span>
+                            <span class="text-2xl font-mono font-bold text-slate-600 block" id="frag-val-4">❓</span>
+                        </div>
+                    </div>
+
+                    <!-- Botón para ir al Vault Central -->
+                    <button onclick="openMasterConsole()" class="w-full mt-6 py-4 rounded-xl text-center font-mono font-bold uppercase text-xs tracking-wider border border-slate-700 transition" id="vault-access-btn" disabled>
+                        🔒 INGRESAR CÓDIGO MAESTRO
+                    </button>
+                </div>
+            </div>
+
+            <!-- PANEL CENTRAL: MAPA DE PLANTA INTERACTIVO -->
+            <div class="lg:col-span-8 flex flex-col bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl relative">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-base font-bold text-slate-300 font-mono tracking-wide uppercase">🗺️ Distribución de la Planta de Apex Logistics</h2>
+                    <span class="text-xs text-slate-400 italic">Haga clic en las estaciones activas para diagnosticar</span>
+                </div>
+                
+                <!-- ÁREA DE MAPA INTERACTIVO -->
+                <div class="flex-grow flex items-center justify-center bg-slate-950 border border-slate-800 rounded-xl p-4 min-h-[350px] relative overflow-hidden">
+                    <svg viewBox="0 0 800 450" class="w-full h-full max-h-[400px]" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Líneas de flujo de proceso (Background) -->
+                        <path d="M 120 150 L 320 150 L 320 280 L 120 280 L 120 370 L 680 370" fill="none" stroke="#334155" stroke-width="4" stroke-dasharray="10, 5"/>
+                        <path id="active-flow" d="M 120 150 L 320 150 L 320 280 L 120 280 L 120 370 L 680 370" fill="none" stroke="#10b981" stroke-width="4" stroke-dasharray="10, 5" stroke-dashoffset="0" class="transition-all duration-300 opacity-20"/>
+
+                        <!-- Estación 1: Taller de Ensamble -->
+                        <g id="map-room-1" onclick="selectRoom(1)" class="cursor-pointer group">
+                            <rect x="50" y="80" width="180" height="110" rx="10" fill="#1e293b" stroke="#475569" stroke-width="3" class="group-hover:fill-slate-800 transition duration-300" id="rect-room-1"/>
+                            <text x="140" y="115" fill="#94a3b8" font-size="12" font-weight="bold" text-anchor="middle" class="pointer-events-none group-hover:fill-white font-mono uppercase">1. Ensamble</text>
+                            <text x="140" y="135" fill="#64748b" font-size="10" text-anchor="middle" class="pointer-events-none font-mono">SMED & Jidoka</text>
+                            <!-- Indicador de Estado -->
+                            <circle cx="140" cy="160" r="10" fill="#f43f5e" id="status-dot-1" class="animate-pulse pointer-events-none"/>
+                        </g>
+
+                        <!-- Estación 2: Almacén de Kanban -->
+                        <g id="map-room-2" onclick="selectRoom(2)" class="cursor-pointer group">
+                            <rect x="250" y="80" width="180" height="110" rx="10" fill="#1e293b" stroke="#475569" stroke-width="3" class="group-hover:fill-slate-800 transition duration-300" id="rect-room-2"/>
+                            <text x="340" y="115" fill="#94a3b8" font-size="12" font-weight="bold" text-anchor="middle" class="pointer-events-none group-hover:fill-white font-mono uppercase">2. Almacén</text>
+                            <text x="340" y="135" fill="#64748b" font-size="10" text-anchor="middle" class="pointer-events-none font-mono">Kanban / Pull</text>
+                            <!-- Indicador de Estado -->
+                            <circle cx="340" cy="160" r="10" fill="#f43f5e" id="status-dot-2" class="animate-pulse pointer-events-none"/>
+                        </g>
+
+                        <!-- Estación 3: Oficina de Valor / VSM -->
+                        <g id="map-room-3" onclick="selectRoom(3)" class="cursor-pointer group">
+                            <rect x="50" y="230" width="180" height="110" rx="10" fill="#1e293b" stroke="#475569" stroke-width="3" class="group-hover:fill-slate-800 transition duration-300" id="rect-room-3"/>
+                            <text x="140" y="265" fill="#94a3b8" font-size="12" font-weight="bold" text-anchor="middle" class="pointer-events-none group-hover:fill-white font-mono uppercase">3. VSM & Derroches</text>
+                            <text x="140" y="285" fill="#64748b" font-size="10" text-anchor="middle" class="pointer-events-none font-mono">Oficina de Valor</text>
+                            <!-- Indicador de Estado -->
+                            <circle cx="140" cy="310" r="10" fill="#f43f5e" id="status-dot-3" class="animate-pulse pointer-events-none"/>
+                        </g>
+
+                        <!-- Estación 4: Mantenimiento Autónomo -->
+                        <g id="map-room-4" onclick="selectRoom(4)" class="cursor-pointer group">
+                            <rect x="250" y="230" width="180" height="110" rx="10" fill="#1e293b" stroke="#475569" stroke-width="3" class="group-hover:fill-slate-800 transition duration-300" id="rect-room-4"/>
+                            <text x="340" y="265" fill="#94a3b8" font-size="12" font-weight="bold" text-anchor="middle" class="pointer-events-none group-hover:fill-white font-mono uppercase">4. Mantenimiento</text>
+                            <text x="340" y="285" fill="#64748b" font-size="10" text-anchor="middle" class="pointer-events-none font-mono">Poka-Yoke & Andon</text>
+                            <!-- Indicador de Estado -->
+                            <circle cx="340" cy="310" r="10" fill="#f43f5e" id="status-dot-4" class="animate-pulse pointer-events-none"/>
+                        </g>
+
+                        <!-- Estación Master Vault -->
+                        <g id="map-vault" class="pointer-events-none opacity-50">
+                            <rect x="470" y="110" width="280" height="200" rx="15" fill="#0f172a" stroke="#1e293b" stroke-width="4" id="vault-box"/>
+                            <!-- Puerta Bóveda -->
+                            <circle cx="610" cy="210" r="50" fill="#1e293b" stroke="#475569" stroke-width="5" id="vault-circle"/>
+                            <path d="M 610 160 L 610 260 M 560 210 L 660 210" stroke="#64748b" stroke-width="4"/>
+                            <circle cx="610" cy="210" r="20" fill="#0f172a" stroke="#475569" stroke-width="3"/>
+                            <text x="610" y="138" fill="#e2e8f0" font-size="13" font-weight="bold" text-anchor="middle" class="font-mono">MASTER VAULT CONTROL</text>
+                            <text x="610" y="288" fill="#475569" font-size="10" text-anchor="middle" class="font-mono uppercase" id="vault-status-text">Consola Bloqueada</text>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- VENTANA EMERGENTE (MODAL) PARA ENIGMAS DE ESTACIONES (4 RETOS) -->
+        <div id="room-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl transition-all duration-300 transform scale-95" id="modal-container">
+                
+                <!-- Cabecera del Enigma -->
+                <div class="flex justify-between items-center p-6 border-b border-slate-800">
+                    <div>
+                        <span id="modal-room-indicator" class="text-xs font-mono font-bold text-emerald-400 tracking-wider">ESTACIÓN 1</span>
+                        <h2 id="modal-room-title" class="text-2xl font-bold text-white">Nombre de la Estación</h2>
+                        <!-- Progreso interno de retos -->
+                        <span id="modal-room-challenge-progress" class="text-sm font-mono text-slate-400 block mt-1">Reto 1 de 4</span>
+                    </div>
+                    <button onclick="closeRoomModal()" class="text-slate-400 hover:text-white text-xl p-2 rounded-lg bg-slate-800 hover:bg-slate-700 transition">✕</button>
+                </div>
+
+                <!-- Detalle y Cuerpo del Enigma -->
+                <div class="p-6 space-y-6">
+                    <p id="modal-room-scenario" class="text-slate-200 text-base md:text-lg leading-relaxed bg-slate-950 p-5 rounded-2xl border border-slate-800">
+                        Contexto del problema...
+                    </p>
+
+                    <!-- Pregunta / Reto -->
+                    <div class="space-y-4">
+                        <h4 id="modal-room-question" class="text-base font-bold text-slate-100 uppercase tracking-wide">¿Cuál es su diagnóstico?</h4>
+                        <div id="modal-room-options" class="space-y-3">
+                            <!-- Opciones inyectadas por JS -->
+                        </div>
+                    </div>
+
+                    <!-- Mensaje de Retroalimentación -->
+                    <div id="modal-room-feedback" class="p-5 rounded-xl hidden border">
+                        <p class="text-base font-semibold" id="modal-room-feedback-text">Retroalimentación...</p>
+                    </div>
+                </div>
+
+                <!-- Footer del Modal -->
+                <div class="p-6 border-t border-slate-800 flex justify-between items-center bg-slate-900/50">
+                    <button onclick="closeRoomModal()" class="px-5 py-3 rounded-lg border border-slate-700 text-slate-300 text-xs font-mono uppercase hover:bg-slate-800 transition">Salir Temporalmente</button>
+                    <div class="flex gap-3">
+                        <button id="modal-submit-btn" class="px-6 py-3 rounded-lg bg-emerald-500 text-slate-950 font-mono font-bold text-sm uppercase hover:bg-emerald-400 transition">Confirmar Diagnóstico</button>
+                        <button id="modal-next-challenge-btn" onclick="nextRoomChallenge()" class="px-6 py-3 rounded-lg bg-blue-500 text-white font-mono font-bold text-sm uppercase hover:bg-blue-400 transition hidden">Siguiente Reto ➔</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PANTALLA 3: TERMINAL DE LA BÓVEDA MAESTRA (CÓDIGO NUMÉRICO DE 4 DÍGITOS) -->
+        <section id="screen-terminal" class="fade-in flex-grow hidden flex flex-col justify-center items-center py-6">
+            <div class="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-3xl p-8 md:p-12 max-w-2xl w-full text-center shadow-2xl relative">
+                <span class="px-3 py-1.5 rounded-full text-xs font-mono font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30 tracking-widest uppercase">Decodificador</span>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-white mt-5 font-mono uppercase">Apex Master Vault</h2>
+                <p class="text-sm text-slate-400 mt-2">La clave está conformada por exactamente <strong>4 dígitos</strong> recopilados en los terminales. Son los pilares del Modelo Lean.</p>
+                
+                <!-- Display del código (4 cajas exactas) -->
+                <div class="grid grid-cols-4 gap-4 max-w-sm mx-auto mt-8">
+                    <div class="h-20 rounded-xl bg-slate-950 border-2 border-slate-800 text-4xl font-mono font-bold text-slate-100 flex items-center justify-center" id="code-digit-1">_</div>
+                    <div class="h-20 rounded-xl bg-slate-950 border-2 border-slate-800 text-4xl font-mono font-bold text-slate-100 flex items-center justify-center" id="code-digit-2">_</div>
+                    <div class="h-20 rounded-xl bg-slate-950 border-2 border-slate-800 text-4xl font-mono font-bold text-slate-100 flex items-center justify-center" id="code-digit-3">_</div>
+                    <div class="h-20 rounded-xl bg-slate-950 border-2 border-slate-800 text-4xl font-mono font-bold text-slate-100 flex items-center justify-center" id="code-digit-4">_</div>
+                </div>
+
+                <!-- Teclado Numérico -->
+                <div class="grid grid-cols-3 gap-3 max-w-xs mx-auto mt-8">
+                    <button onclick="pressKey(1)" class="py-4 bg-slate-800 hover:bg-slate-700 text-xl font-bold rounded-xl font-mono transition text-white">1</button>
+                    <button onclick="pressKey(2)" class="py-4 bg-slate-800 hover:bg-slate-700 text-xl font-bold rounded-xl font-mono transition text-white">2</button>
+                    <button onclick="pressKey(3)" class="py-4 bg-slate-800 hover:bg-slate-700 text-xl font-bold rounded-xl font-mono transition text-white">3</button>
+                    <button onclick="pressKey(4)" class="py-4 bg-slate-800 hover:bg-slate-700 text-xl font-bold rounded-xl font-mono transition text-white">4</button>
+                    <button onclick="pressKey(5)" class="py-4 bg-slate-800 hover:bg-slate-700 text-xl font-bold rounded-xl font-mono transition text-white">5</button>
+                    <button onclick="pressKey(6)" class="py-4 bg-slate-800 hover:bg-slate-700 text-xl font-bold rounded-xl font-mono transition text-white">6</button>
+                    <button onclick="pressKey(7)" class="py-4 bg-slate-800 hover:bg-slate-700 text-xl font-bold rounded-xl font-mono transition text-white">7</button>
+                    <button onclick="pressKey(8)" class="py-4 bg-slate-800 hover:bg-slate-700 text-xl font-bold rounded-xl font-mono transition text-white">8</button>
+                    <button onclick="pressKey(9)" class="py-4 bg-slate-800 hover:bg-slate-700 text-xl font-bold rounded-xl font-mono transition text-white">9</button>
+                    <button onclick="pressKey(0)" class="py-4 bg-slate-800 hover:bg-slate-700 text-xl font-bold rounded-xl font-mono transition text-white">0</button>
+                    <button onclick="clearKeys()" class="py-4 bg-rose-500/25 hover:bg-rose-500/35 text-rose-400 text-base font-bold rounded-xl transition font-mono uppercase col-span-2">Borrar</button>
+                </div>
+
+                <div id="terminal-feedback" class="mt-4 text-base font-bold hidden font-mono"></div>
+
+                <div class="mt-8 flex justify-between gap-4">
+                    <button onclick="backToMap()" class="px-6 py-4 rounded-xl border border-slate-700 text-slate-300 hover:bg-slate-800 font-mono text-sm uppercase tracking-wider transition">Volver al Mapa</button>
+                    <button onclick="unlockVault()" class="flex-grow px-6 py-4 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold font-mono text-sm uppercase tracking-wider rounded-xl shadow-lg transition">Desencriptar ⚙️</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PANTALLA 4: AUDITORÍA DE MEJORA CONTINUA (CUESTIONARIO FINAL) -->
+        <section id="screen-quiz" class="fade-in flex-grow hidden py-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-10 max-w-4xl mx-auto shadow-2xl relative">
+                
+                <!-- Encabezado del Quiz -->
+                <div class="flex justify-between items-center border-b border-slate-800 pb-5 mb-6">
+                    <div>
+                        <span class="px-3 py-1.5 rounded-full text-xs font-mono font-bold bg-blue-500/10 text-blue-400 border border-blue-500/30 tracking-widest uppercase">AUDITORÍA FINAL</span>
+                        <h2 class="text-2xl md:text-3xl font-bold mt-2 text-white">Auditoría de Mejora Continua</h2>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs font-mono font-bold text-slate-400 block">REACTIVO</span>
+                        <span id="quiz-question-counter" class="text-2xl font-mono font-bold text-blue-400">1 / 10</span>
+                    </div>
+                </div>
+
+                <!-- Barra de Progreso -->
+                <div class="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800 mb-6">
+                    <div id="quiz-progress-bar" class="h-full bg-blue-500 transition-all duration-300" style="width: 10%"></div>
+                </div>
+
+                <!-- Tarjeta de Pregunta -->
+                <div id="quiz-question-card" class="space-y-6">
+                    <h3 id="quiz-question-text" class="text-lg md:text-xl font-semibold text-slate-100">Cargando pregunta...</h3>
+                    
+                    <div id="quiz-options-container" class="space-y-3">
+                        <!-- Botones de opciones inyectados vía JS -->
+                    </div>
+
+                    <!-- Retroalimentación Dinámica -->
+                    <div id="quiz-feedback" class="p-5 rounded-xl border hidden">
+                        <p id="quiz-feedback-text" class="text-sm md:text-base leading-relaxed font-semibold">Retroalimentación...</p>
+                    </div>
+                </div>
+
+                <!-- Footer del Quiz -->
+                <div class="mt-8 flex justify-end gap-3 border-t border-slate-800 pt-6">
+                    <button id="quiz-next-btn" onclick="nextQuizQuestion()" class="px-8 py-4 bg-blue-500 text-white font-mono font-bold text-sm uppercase tracking-wider rounded-xl hover:bg-blue-400 transition shadow-md hidden">Siguiente Reactivo ➔</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PANTALLA 5: VICTORIA, MÉTRICAS Y DESCARGA DE CERTIFICADO -->
+        <section id="screen-victory" class="fade-in flex-grow hidden flex flex-col items-center py-6">
+            
+            <!-- TARJETA DE REPORTE Y ACCIONES -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-10 max-w-4xl w-full shadow-2xl relative mb-6 no-print">
+                <div class="absolute -right-20 -top-20 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl"></div>
+                <div class="text-center">
+                    <span class="text-5xl">🏆</span>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-emerald-400 tracking-tight mt-4">¡Logística Apex Estabilizada!</h2>
+                    <p class="text-slate-300 text-base md:text-lg mt-2">Ha erradicado sistemáticamente la grasa de los procesos logísticos y superado la auditoría estratégica con éxito.</p>
+                </div>
+
+                <!-- Métricas Clave de Desempeño (KPI) -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+                    <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 text-center shadow-lg">
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-widest font-mono">Calificación</span>
+                        <div id="victory-score-pct" class="text-3xl font-bold text-emerald-400 mt-2 font-mono">100%</div>
+                    </div>
+                    <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 text-center shadow-lg">
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-widest font-mono">Correctas</span>
+                        <div id="victory-correct-count" class="text-3xl font-bold text-blue-400 mt-2 font-mono">10</div>
+                    </div>
+                    <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 text-center shadow-lg">
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-widest font-mono">Incorrectas</span>
+                        <div id="victory-incorrect-count" class="text-3xl font-bold text-rose-500 mt-2 font-mono">0</div>
+                    </div>
+                    <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 text-center shadow-lg">
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-widest font-mono">Tiempo Total</span>
+                        <div id="victory-total-time" class="text-3xl font-bold text-amber-400 mt-2 font-mono">00:00</div>
+                    </div>
+                </div>
+
+                <!-- Rango alcanzado en base a métricas -->
+                <div class="mt-6 bg-slate-950 p-5 rounded-2xl border border-slate-800 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-widest font-mono">Nivel de Desempeño</span>
+                        <h4 id="victory-badge-title" class="text-xl font-bold text-slate-100">Excelente</h4>
+                    </div>
+                    <div id="victory-badge-stars" class="text-3xl text-amber-400 font-mono">⭐⭐⭐⭐⭐</div>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+                    <button onclick="printCertificate()" class="px-8 py-4.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-mono font-bold text-base uppercase tracking-wider rounded-xl shadow-lg hover:shadow-emerald-500/20 transform hover:-translate-y-0.5 transition flex items-center justify-center gap-2">
+                        📥 Imprimir / Guardar Certificado
+                    </button>
+                    <button onclick="resetGame()" class="px-8 py-4.5 border border-slate-700 text-slate-300 hover:bg-slate-800 font-mono text-base uppercase tracking-wider rounded-xl transition">
+                        Reiniciar Simulación
+                    </button>
+                </div>
+            </div>
+
+            <!-- VISTA PREVIA DEL CERTIFICADO (Optimizada para pantalla e impresión mediante SVG de alta definición) -->
+            <div id="certificate-print-area" class="w-full max-w-4xl bg-white text-slate-900 border-8 border-double border-slate-800 p-10 rounded-xl shadow-2xl relative overflow-hidden flex flex-col justify-between" style="aspect-ratio: 1.414 / 1;">
+                
+                <!-- Decoración de Esquinas mediante SVG -->
+                <div class="absolute top-0 left-0 w-32 h-32 border-t-4 border-l-4 border-emerald-600 m-4 pointer-events-none"></div>
+                <div class="absolute top-0 right-0 w-32 h-32 border-t-4 border-r-4 border-emerald-600 m-4 pointer-events-none"></div>
+                <div class="absolute bottom-0 left-0 w-32 h-32 border-b-4 border-l-4 border-emerald-600 m-4 pointer-events-none"></div>
+                <div class="absolute bottom-0 right-0 w-32 h-32 border-b-4 border-r-4 border-emerald-600 m-4 pointer-events-none"></div>
+
+                <!-- Sello de Fondo -->
+                <div class="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none select-none">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtK-l1sSEFvatDEnFBLU4tVSxge2SOueyoTw&s" class="w-2/3 h-auto">
+                </div>
+
+                <div class="text-center space-y-4">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtK-l1sSEFvatDEnFBLU4tVSxge2SOueyoTw&s" alt="Logo Institucional" class="h-20 w-auto mx-auto object-contain p-1 border rounded-lg bg-white">
+                    <h3 class="text-sm font-bold uppercase tracking-widest text-emerald-700 font-mono">Dirección de Ingeniería y Operaciones</h3>
+                    <h1 class="text-4xl font-serif font-extrabold text-slate-900 tracking-tight">CERTIFICADO DE EXCELENCIA</h1>
+                    <p class="text-xs uppercase tracking-widest text-slate-500 font-mono">Otorgado con orgullo por haber estabilizado y optimizado la cadena de valor global</p>
+                </div>
+
+                <div class="text-center my-6 space-y-4">
+                    <p class="text-base font-sans italic text-slate-600">Este certificado de reconocimiento es otorgado solemnemente a:</p>
+                    <h2 id="cert-student-name" class="text-3xl font-extrabold text-slate-900 tracking-wide underline decoration-emerald-600 decoration-wavy py-2 uppercase">JUAN PÉREZ</h2>
+                    <p class="text-sm max-w-xl mx-auto text-slate-600 leading-relaxed font-sans">
+                        Por haber superado exitosamente el complejo desafío tecnológico y analítico de la <strong>Cámara de Escape: Apex Logistics</strong>. Demostró dominio experto en la especificación de valor, la erradicación de las 10 categorías de derroche y la implementación estratégica de SMED, Kanban, VSM, Jidoka, Poka-yoke y Mantenimiento Autónomo.
+                    </p>
+                </div>
+
+                <!-- Firmas y Metadatos -->
+                <div class="grid grid-cols-3 gap-8 text-center mt-6">
+                    <div class="flex flex-col justify-end">
+                        <span class="text-xs font-bold text-slate-800 uppercase font-mono tracking-wider">Materia</span>
+                        <span class="text-[11px] text-slate-600 font-sans">Adm. de la Producción y Mantenimiento</span>
+                    </div>
+                    <div class="flex flex-col justify-end items-center">
+                        <!-- Firma Digitalizada en SVG -->
+                        <svg class="w-32 h-10 text-slate-800" viewBox="0 0 100 40" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M 10 30 Q 30 10, 50 30 T 90 20 M 30 10 L 70 30" fill="none" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        <div class="border-t border-slate-400 w-44 mt-1"></div>
+                        <span class="text-xs font-bold text-slate-800 uppercase font-mono tracking-wider mt-1">Dilsa J. González V.</span>
+                        <span class="text-[10px] text-slate-500 font-sans">Profesora de Cátedra</span>
+                    </div>
+                    <div class="flex flex-col justify-end">
+                        <span class="text-xs font-bold text-slate-800 uppercase font-mono tracking-wider">Evaluación</span>
+                        <span id="cert-score-display" class="text-sm text-emerald-700 font-bold font-mono">Nota: 100/100</span>
+                        <span id="cert-date-display" class="text-[10px] text-slate-500 font-mono">Fecha: 01/01/2026</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- AUDIO SINTETIZADOR EN TIEMPO REAL (Web Audio API) -->
+    <script>
+        class LeanAudio {
+            constructor() {
+                this.ctx = null;
+                this.ambientNode = null;
+                this.isMuted = true;
+            }
+
+            init() {
+                if (!this.ctx) {
+                    try {
+                        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    } catch (e) {
+                        console.warn("AudioContext no soportado.");
+                    }
+                }
+            }
+
+            playClick() {
+                if (this.isMuted) return;
+                this.init();
+                if (!this.ctx) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(600, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(150, this.ctx.currentTime + 0.1);
+
+                gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
+
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.1);
+            }
+
+            playSuccess() {
+                if (this.isMuted) return;
+                this.init();
+                if (!this.ctx) return;
+                const now = this.ctx.currentTime;
+                const freqs = [329.63, 392.00, 523.25, 659.25]; // Mi4, Sol4, Do5, Mi5
+                freqs.forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.1);
+                    
+                    gain.gain.setValueAtTime(0.0, now + idx * 0.1);
+                    gain.gain.linearRampToValueAtTime(0.15, now + idx * 0.1 + 0.05);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.1 + 0.3);
+                    
+                    osc.start(now + idx * 0.1);
+                    osc.stop(now + idx * 0.1 + 0.35);
+                });
+            }
+
+            playError() {
+                if (this.isMuted) return;
+                this.init();
+                if (!this.ctx) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(130, this.ctx.currentTime);
+                osc.frequency.setValueAtTime(110, this.ctx.currentTime + 0.15);
+
+                gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.3);
+
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.3);
+            }
+
+            playUnlock() {
+                if (this.isMuted) return;
+                this.init();
+                if (!this.ctx) return;
+                const now = this.ctx.currentTime;
+                const freqs = [261.63, 329.63, 392.00, 523.25, 783.99, 1046.50]; // Do4, Mi4, Sol4, Do5, Sol5, Do6
+                freqs.forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+
+                    gain.gain.setValueAtTime(0.0, now + idx * 0.08);
+                    gain.gain.linearRampToValueAtTime(0.1, now + idx * 0.08 + 0.04);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.08 + 0.4);
+
+                    osc.start(now + idx * 0.08);
+                    osc.stop(now + idx * 0.08 + 0.4);
+                });
+            }
+
+            startAmbient() {
+                this.init();
+                if (this.isMuted || !this.ctx) return;
+                if (this.ambientNode) return;
+
+                const osc1 = this.ctx.createOscillator();
+                const gain1 = this.ctx.createGain();
+                osc1.type = 'sine';
+                osc1.frequency.setValueAtTime(55, this.ctx.currentTime); 
+
+                const filter = this.ctx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(120, this.ctx.currentTime);
+
+                osc1.connect(filter);
+                filter.connect(gain1);
+                gain1.connect(this.ctx.destination);
+
+                gain1.gain.setValueAtTime(0.05, this.ctx.currentTime);
+
+                osc1.start();
+                this.ambientNode = { osc: osc1, gain: gain1 };
+            }
+
+            stopAmbient() {
+                if (this.ambientNode) {
+                    try {
+                        this.ambientNode.osc.stop();
+                    } catch(e){}
+                    this.ambientNode = null;
+                }
+            }
+        }
+
+        const sfx = new LeanAudio();
+
+        function toggleAmbientSound() {
+            sfx.isMuted = !sfx.isMuted;
+            const btn = document.getElementById('sound-toggle-btn');
+            if (sfx.isMuted) {
+                btn.innerHTML = '🔈 Sonido Apagado';
+                sfx.stopAmbient();
+            } else {
+                btn.innerHTML = '🔊 Sonido Activo';
+                sfx.startAmbient();
+                sfx.playClick();
+            }
+        }
+    </script>
+
+    <!-- MOTOR DEL JUEGO / LÓGICA LOGÍSTICA LEAN -->
+    <script>
+        // CONFIGURACIÓN DE LOS DATOS EDUCATIVOS CON EXACTAMENTE 4 RETOS POR ESTACIÓN
+        const roomsData = {
+            1: {
+                title: "Taller de Ensamble de Apex",
+                digit: "5", // 5 Principios Lean
+                challenges: [
+                    {
+                        scenario: "Usted ingresa al taller de ensamble. El indicador visual Andon está en ROJO debido a que los tiempos de parada son excesivos. Para aplicar exitosamente SMED (Single Minute Exchange of Die), el primer gran paso técnico requiere clasificar de forma estricta las operaciones.",
+                        question: "Reto 1/4: ¿Cuál representa la clasificación estratégica primaria de SMED y una acción para transformar una operación de inmediato?",
+                        options: [
+                            "A) Dividir en operaciones Internas (máquina parada) y Externas (máquina en marcha), precalentando moldes de forma externa antes de la parada.",
+                            "B) Clasificar en tareas complejas y simples, y capacitar al operador durante varios meses.",
+                            "C) Rediseñar el motor principal mediante fuertes inversiones de capital para acelerar la velocidad."
+                        ],
+                        answer: 0,
+                        feedbackCorrect: "¡Excelente! Separar operaciones internas (con máquina parada) y externas (con máquina en marcha) es el corazón de la técnica SMED.",
+                        feedbackIncorrect: "Incorrecto. SMED se enfoca primeramente en discernir operaciones internas y externas."
+                    },
+                    {
+                        scenario: "Una vez clasificadas las tareas, el supervisor le pregunta cuál es el objetivo fundamental de SMED para convencer a la junta directiva de su financiamiento.",
+                        question: "Reto 2/4: ¿Cuál es el principal objetivo y beneficio operacional que persigue la implantación de SMED?",
+                        options: [
+                            "A) Reducir el tamaño de los lotes de producción para disminuir inventarios y acortar los tiempos de ciclo, adaptándose rápidamente a la demanda.",
+                            "B) Evitar de forma definitiva los accidentes de trabajo eliminando todo el esfuerzo físico del operador.",
+                            "C) Incrementar artificialmente los inventarios de seguridad para mitigar cualquier imprevisto del proveedor."
+                        ],
+                        answer: 0,
+                        feedbackCorrect: "¡Correcto! Reducir los tiempos de cambio nos permite fabricar lotes más pequeños, disminuyendo los costosos stocks acumulados.",
+                        feedbackIncorrect: "Fallo de concepto. Recuerde que Lean y SMED buscan disminuir lotes y stocks, no acumularlos."
+                    },
+                    {
+                        scenario: "Ahora observa el módulo automatizado del taller. Se producen fallas inadvertidas y las piezas defectuosas siguen fluyendo por la línea, aumentando el scrap.",
+                        question: "Reto 3/4: ¿Qué herramienta del Modelo de Gestión Lean (MGL) se define como el 'control automático de defectos' para evitar que avancen unidades no conformes?",
+                        options: [
+                            "A) Kanban de transporte automático.",
+                            "B) Jidoka (autonomatización).",
+                            "C) CMI (Cuadro de Mando Integral)."
+                        ],
+                        answer: 1,
+                        feedbackCorrect: "¡Espectacular! Jidoka realiza el control de defectos de manera autónoma, impidiendo el paso de unidades defectuosas de un proceso al siguiente.",
+                        feedbackIncorrect: "Incorrecto. Jidoka es el término y la herramienta exacta para la autonomatización de defectos en el origen."
+                    },
+                    {
+                        scenario: "Para consolidar el taller de ensamble de forma esbelta, necesita resumir las ventajas combinadas de Jidoka y SMED para la eficiencia operacional.",
+                        question: "Reto 4/4: ¿Cuál es el resultado directo de la combinación exitosa de estas dos herramientas en el taller?",
+                        options: [
+                            "A) Mayor burocracia documental y mayor rigidez estructural ante variaciones del mercado.",
+                            "B) Menor costo directo de producción, reducción significativa de inventarios y una flexibilidad operativa máxima que tiende a cero defectos.",
+                            "C) Aumento drástico del tamaño de los lotes y de los tiempos de preparación física."
+                        ],
+                        answer: 1,
+                        feedbackCorrect: "¡Felicidades! Ha estabilizado el taller de ensamble. Su primer fragmento del código maestro corresponde a la cantidad de principios esenciales Lean: ¡'5'!",
+                        feedbackIncorrect: "Falso. La meta Lean es reducir desperdicios y flexibilizar, no rigidizar ni encarecer."
+                    }
+                ]
+            },
+            2: {
+                title: "Almacén de Distribución Kanban",
+                digit: "1", // Representa 10 Derroches (Primer dígito = 1)
+                challenges: [
+                    {
+                        scenario: "En el Almacén de Apex Logistics, se observa una enorme montaña de cajas acumuladas por meses. El supervisor le dice que producen según un pronóstico semestral rígido (sistema push). Usted sabe que esto viola la filosofía de flujos.",
+                        question: "Reto 1/4: ¿En qué consiste esencialmente un sistema de atracción PULL soportado por Kanban de acuerdo al Modelo de Gestión Lean?",
+                        options: [
+                            "A) En no producir absolutamente nada hasta que el cliente o el proceso posterior emita una orden y lo solicite.",
+                            "B) En empujar toda la producción posible para mantener las máquinas trabajando al 100% de capacidad.",
+                            "C) En externalizar el almacenamiento para ocultar físicamente el stock ocioso."
+                        ],
+                        answer: 0,
+                        feedbackCorrect: "¡Magnífico! El sistema PULL se basa en responder estrictamente a la demanda real del cliente, eliminando la sobreproducción.",
+                        feedbackIncorrect: "Incorrecto. Empujar materiales hacia el almacén sin demanda real es la esencia del desperdicio push."
+                    },
+                    {
+                        scenario: "El equipo de almacén no comprende qué es un 'Kanban' y cree que es solo una etiqueta decorativa en los estantes.",
+                        question: "Reto 2/4: ¿Qué es exactamente un Kanban y cuál es su función en el flujo de materiales?",
+                        options: [
+                            "A) Un reporte mensual de finanzas que evalúa costos operativos.",
+                            "B) Una 'etiqueta de instrucción' visual que sirve como orden de trabajo para especificar qué producir, en qué cantidad y hacia dónde transportarlo.",
+                            "C) Una norma restrictiva que prohíbe el uso de montacargas."
+                        ],
+                        answer: 1,
+                        feedbackCorrect: "¡Correcto! Kanban es una tarjeta de instrucciones que une visualmente los procesos interconectados.",
+                        feedbackIncorrect: "Incorrecto. El Kanban es una herramienta visual de instrucción de producción o transporte."
+                    },
+                    {
+                        scenario: "Para organizar el layout físico de entrega entre el taller de ensamble y el almacén, necesita definir las tarjetas Kanban adecuadas.",
+                        question: "Reto 3/4: ¿Cuáles son los dos tipos principales de tarjetas Kanban utilizados comúnmente en la gestión de planta?",
+                        options: [
+                            "A) Kanban de Calidad e Inspección y Kanban de Auditoría.",
+                            "B) Kanban de Transporte (cantidades a retirar) y Kanban de Producción (cantidad a fabricar).",
+                            "C) Kanban de Proveedores Externos y Kanban de Directivos de Staff."
+                        ],
+                        answer: 1,
+                        feedbackCorrect: "¡Brillante! El Kanban de transporte mueve las piezas y el de producción da la orden de fabricar el lote extraído.",
+                        feedbackIncorrect: "Inexacto. Los dos tipos pilares son transporte (o retiro) y producción."
+                    },
+                    {
+                        scenario: "El gerente general le pide resumir el impacto que el sistema Kanban genera sobre la cadena de valor global de Apex Logistics.",
+                        question: "Reto 4/4: ¿Qué ventaja estratégica clave se alcanza con la correcta implementación de Kanban?",
+                        options: [
+                            "A) Eliminar la necesidad de contratar ingenieros especializados.",
+                            "B) Minimizar los tiempos de entrega interprocesos, identificar cuellos de botella y reducir radicalmente el inventario en proceso.",
+                            "C) Incrementar la rentabilidad de forma contable mediante un aumento de activos fijos inactivos."
+                        ],
+                        answer: 1,
+                        feedbackCorrect: "¡Excelente! Ha optimizado el almacén. El segundo fragmento del código maestro es el primer dígito del total de derroches (10 derroches): ¡'1'!",
+                        feedbackIncorrect: "Falso. La meta es agilizar y reducir el inventario intermedio."
+                    }
+                ]
+            },
+            3: {
+                title: "Oficina de Flujo de Valor (VSM)",
+                digit: "5", // 5S's
+                challenges: [
+                    {
+                        scenario: "Se encuentra en la Oficina de Valor. Los ingenieros debaten cómo mapear los procesos para identificar los cuellos de botella y comprender las demoras de entrega.",
+                        question: "Reto 1/4: ¿Qué herramienta se define como una representación gráfica del flujo de elementos clave que incluye materiales e información desde el proveedor al cliente?",
+                        options: [
+                            "A) VSM (Value Stream Map / Mapa de Flujo de Valor).",
+                            "B) TPM (Total Productive Maintenance).",
+                            "C) Andon de tres niveles de control."
+                        ],
+                        answer: 0,
+                        feedbackCorrect: "¡Brillante! El VSM es la herramienta gráfica pilar para diagnosticar la cadena de valor de inicio a fin.",
+                        feedbackIncorrect: "Incorrecto. La representación gráfica de materiales e información es el VSM."
+                    },
+                    {
+                        scenario: "Al evaluar los desperdicios en planta, el analista define qué es una actividad de 'no valor'.",
+                        question: "Reto 2/4: De acuerdo al MGL, ¿cómo se definen técnicamente los 'derroches' o 'mudas'?",
+                        options: [
+                            "A) Actividades operativas necesarias que generan altos dividendos fiscales.",
+                            "B) Costos ocultos y actividades que consumen recursos, sumando costos y tiempos, pero no agregan valor real para el cliente.",
+                            "C) Equipos avanzados de alta tecnología que trabajan con mantenimiento autónomo."
+                        ],
+                        answer: 1,
+                        feedbackCorrect: "¡Excelente! Los derroches son la grasa de la corporación. No aportan nada al cliente pero incrementan severamente el costo interno.",
+                        feedbackIncorrect: "Incorrecto. Los derroches son actividades ineficientes que agregan costos sin valor."
+                    },
+                    {
+                        scenario: "Detectan que en Apex se generan continuamente excedentes de material debido a pronósticos erróneos y un fuerte enfoque Push.",
+                        question: "Reto 3/4: ¿A qué tipo de derroche corresponde esta producción descontrolada que requiere almacenes adicionales y causa obsolescencia?",
+                        options: [
+                            "A) Tiempos de espera por mala programación.",
+                            "B) Sobreproducción.",
+                            "C) Procesos innecesarios por robustez."
+                        ],
+                        answer: 1,
+                        feedbackCorrect: "¡Así es! La sobreproducción es considerada el peor de los derroches, ya que esconde todos los demás problemas del flujo.",
+                        feedbackIncorrect: "Falso. La sobreproducción es fabricar de más por falta de sincronización con el mercado."
+                    },
+                    {
+                        scenario: "Adicionalmente, se nota que la disposición de las maquinarias provoca que el material recorra largas distancias inútilmente.",
+                        question: "Reto 4/4: ¿A qué se deben los derroches de traslados de productos y movimientos de personal observados en la planta?",
+                        options: [
+                            "A) A fallas mecánicas crónicas en las bandas transportadoras.",
+                            "B) A una mala planificación y a una deficiente distribución física de máquinas y equipos (layout de planta).",
+                            "C) A la falta de un comité formal de staff de operaciones."
+                        ],
+                        answer: 1,
+                        feedbackCorrect: "¡Felicidades! Ha estabilizado el flujo de información del VSM. Su tercer fragmento del código es la cantidad de fases del clásico proceso '5S': ¡'5'!",
+                        feedbackIncorrect: "Inexacto. El layout deficiente es el principal responsable de movimientos y transportes improductivos."
+                    }
+                ]
+            },
+            4: {
+                title: "Central de Mantenimiento Autónomo",
+                digit: "3", // 3 Pilares del éxito
+                challenges: [
+                    {
+                        scenario: "Ingresa a la estación de Mantenimiento Autónomo. Los operarios de línea no cuidan sus máquinas debido a que asumen que 'ellos solo operan'. Se requiere un cambio conductual urgente.",
+                        question: "Reto 1/4: ¿Cuál es el principal objetivo del Mantenimiento Autónomo como pilar de TPM?",
+                        options: [
+                            "A) Capacitar a los operadores de línea para realizar el cuidado básico (limpieza, inspección, lubricación) y detectar fallas tempranas en su equipo.",
+                            "B) Despedir al personal de mantenimiento especializado para ahorrar costos operativos.",
+                            "C) Obligar a los operarios a reparar las tarjetas electrónicas de los servidores centrales."
+                        ],
+                        answer: 0,
+                        feedbackCorrect: "¡Espectacular! El mantenimiento autónomo empodera al operador, haciéndolo corresponsable de la salud diaria del activo.",
+                        feedbackIncorrect: "Incorrecto. Se enfoca en tareas básicas de conservación diaria realizadas por los propios operadores."
+                    },
+                    {
+                        scenario: "Para evitar que ocurran errores inadvertidos por falta de experiencia o descuidos del personal, usted decide instalar dispositivos mecánicos.",
+                        question: "Reto 2/4: ¿Cómo se denominan estas técnicas sencillas a prueba de errores humanos que previenen o detectan fallas físicas en el proceso?",
+                        options: [
+                            "A) Poka-yoke.",
+                            "B) JIT.",
+                            "C) Kaizen continuo."
+                        ],
+                        answer: 0,
+                        feedbackCorrect: "¡Perfecto! Poka-yoke previene o detecta errores humanos antes de que se transformen en costosos defectos de calidad.",
+                        feedbackIncorrect: "Incorrecto. Poka-yoke es la denominación japonesa para sistemas a prueba de fallos inadvertidos."
+                    },
+                    {
+                        scenario: "Para monitorear el estado actual de las estaciones en tiempo real, necesita un sistema de señalización de colores tipo semáforo.",
+                        question: "Reto 3/4: ¿Qué herramienta de gestión visual cumple esta función, y qué indica el color amarillo?",
+                        options: [
+                            "A) Kanban, e indica que se debe despachar material urgente.",
+                            "B) Andon, e indica que la estación o equipo está funcionando de manera parcial o setup de cambio.",
+                            "C) VSM, e indica que el tiempo de no valor agregado es tolerable."
+                        ],
+                        answer: 1,
+                        feedbackCorrect: "¡Correcto! El Andon (verde = normal, amarillo = setup/parcial, rojo = avería) brinda visibilidad operacional inmediata.",
+                        feedbackIncorrect: "Incorrecto. Andon es el semáforo visual de control y el amarillo representa funcionamiento parcial o setup."
+                    },
+                    {
+                        scenario: "Finalmente, el supervisor de operaciones le pregunta cómo consolidar la flexibilidad mediante las dinámicas de personal de línea.",
+                        question: "Reto 4/4: ¿A través de qué práctica de RR.HH. se logra contar con 'trabajadores polivalentes'?",
+                        options: [
+                            "A) Manteniendo al operario en una única actividad repetitiva toda su vida laboral.",
+                            "B) Programas estructurados de rotación de puestos de trabajo y capacitación continua en producción, calidad y mantenimiento.",
+                            "C) Aumentando exclusivamente la velocidad nominal de las líneas."
+                        ],
+                        answer: 1,
+                        feedbackCorrect: "¡Extraordinario! Ha estabilizado la planta de Apex. Su cuarto dígito es el total de pilares estratégicos de la empresa de clase mundial: ¡'3'!",
+                        feedbackIncorrect: "Incorrecto. La rotación planificada y la capacitación constante son los pilares para la polivalencia del personal."
+                    }
+                ]
+            }
+        };
+
+        const quizQuestions = [
+            {
+                q: "El Modelo de Gestión Lean (MGL) tiene como principal objetivo maximizar las ganancias puramente financieras a corto plazo, sin importar la adaptabilidad a la demanda del consumidor final.",
+                options: ["Verdadero", "Falso"],
+                answer: 1,
+                feedback: "Falso. El principal objetivo del MGL es atender los requerimientos cambiantes de los clientes definiendo de forma precisa su propuesta de valor, eliminando sistemáticamente el no-valor."
+            },
+            {
+                q: "El concepto de 'Mano de Obra' es la denominación preferida en las organizaciones Lean porque reduce al operario exclusivamente a su esfuerzo físico, descartando su capacidad cognitiva y emocional.",
+                options: ["Verdadero", "Falso"],
+                answer: 1,
+                feedback: "Falso. En el sistema Lean se elimina el término 'mano de obra' y se prefiere hablar de 'personas', permitiendo que el trabajador alinee su mente, su corazón y su cuerpo mediante programas de sugerencias y empoderamiento."
+            },
+            {
+                q: "El Jidoka es una herramienta de autonomatización del control de defectos en el proceso, que faculta la parada de una máquina o línea de producción de forma inmediata al detectar una anomalía.",
+                options: ["Verdadero", "Falso"],
+                answer: 0,
+                feedback: "Verdadero. Jidoka realiza el control de defectos de manera autónoma, impidiendo el paso de unidades defectuosas de un proceso al subsiguiente."
+            },
+            {
+                q: "Para que un Modelo de Gestión Lean sea exitoso, los directivos deben contar de forma interna con la figura de un facilitador, el cual aconsejablemente debe desempeñar un rol de staff en la organización.",
+                options: ["Verdadero", "Falso"],
+                answer: 0,
+                feedback: "Verdadero. El facilitador debe tener un rol de staff para evitar que las actividades operativas de línea demanden todo su tiempo, lo que debilitaría el mantenimiento del modelo."
+            },
+            {
+                q: "El método SMED se enfoca exclusivamente en capacitar y presionar físicamente a los operarios para que corran más rápido al cambiar moldes, sin necesidad de modificar los métodos ni clasificar tareas.",
+                options: ["Verdadero", "Falso"],
+                answer: 1,
+                feedback: "Falso. SMED es un conjunto de técnicas científicas orientadas a analizar el propio método de cambio de formato para simplificarlo, estandarizarlo y pasar operaciones internas a externas de forma estructurada."
+            },
+            {
+                q: "Un proceso cuenta con la presencia de un layout deficiente donde la materia prima es sometida a continuos movimientos internos que consumen horas hombre, espacio y energía. ¿A qué categoría de derroche pertenece?",
+                options: [
+                    "A) Sobreproducción",
+                    "B) Traslados de mercadería y movimientos innecesarios de personas",
+                    "C) Procesos innecesarios por robustez tecnológica"
+                ],
+                answer: 1,
+                feedback: "Correcto. La incorrecta distribución en planta de máquinas (layout) genera traslados ineficientes de productos y materiales, sumando costos que el cliente no tolera."
+            },
+            {
+                q: "Un dispositivo poka-yoke clasificado específicamente como 'método de control' tiene el efecto principal de:",
+                options: [
+                    "A) Emitir una alarma acústica o luz intermitente para advertir al operario.",
+                    "B) Detener la máquina o bloquear físicamente los sistemas para impedir que continúe el proceso con error.",
+                    "C) Modificar el plan de ventas basándose en el comportamiento de los clientes."
+                ],
+                answer: 1,
+                feedback: "Excelente. Los poka-yoke de control detienen o bloquean la operación inmediatamente al detectar el fallo, garantizando el 100% de la calidad."
+            },
+            {
+                q: "De acuerdo a las lecturas, la polivalencia del trabajador (multiespecialista) se consolida principalmente a través de cuál de las siguientes dinámicas organizacionales:",
+                options: [
+                    "A) Especializarlo rígidamente en un solo puesto de trabajo durante años.",
+                    "B) Implementar programas estructurados de rotación de puestos de trabajo que fomenten habilidades en mantenimiento, producción y calidad.",
+                    "C) Incrementar exclusivamente la cuota física de producción diaria por horas trabajadas."
+                ],
+                answer: 1,
+                feedback: "Correcto. La rotación planificada de puestos desarrolla competencias multidisciplinarias (mecánica, electricidad, calidad), haciendo al sistema productivo flexible."
+            },
+            {
+                q: "¿Qué herramienta de gestión visual emplea un código de colores tipo semáforo para monitorear permanentemente el estado actual de las operaciones en tiempo real?",
+                options: [
+                    "A) Kanban",
+                    "B) VSM (Value Stream Map)",
+                    "C) Andon"
+                ],
+                answer: 2,
+                feedback: "¡Así es! El dispositivo tipo semáforo Andon indica: Verde (producción normal), Amarillo (operación parcial o setup) y Rojo (problema inminente)."
+            },
+            {
+                q: "Las empresas de clase mundial maximizan la rentabilidad en el presente, pero reconocen que para asegurar su desarrollo a mediano y largo plazo necesitan consolidar:",
+                options: [
+                    "A) Incrementos de inventario para amortiguar fallas.",
+                    "B) Un desarrollo sustentable y flexibilidad para adaptarse rápidamente a la variabilidad de la demanda.",
+                    "C) Reducciones drásticas en los presupuestos de capacitación del personal."
+                ],
+                answer: 1,
+                feedback: "Perfecto. La sostenibilidad a mediano y largo plazo depende directamente de la flexibilidad operacional para seguir el compás cambiante de la demanda del cliente."
+            }
+        ];
+
+        // VARIABLES DE ESTADO DEL JUEGO
+        let gameState = {
+            studentName: "",
+            timerInterval: null,
+            timeElapsed: 0,
+            solvedRooms: [],
+            currentRoomId: null,
+            currentChallengeIndex: 0, // Índice interno de los 4 retos de la estación
+            codeEntered: "",
+            masterCode: "5153", // CÓDIGO MAESTRO FIJO DE 4 DÍGITOS
+            quizCurrentIndex: 0,
+            quizScore: 0,
+            quizAnswersRecord: []
+        };
+
+        // INICIAR EL JUEGO (PORTADA -> MAPA)
+        function startGame() {
+            const nameInput = document.getElementById('student-name').value.trim();
+            if (!nameInput) {
+                document.getElementById('name-warning').classList.remove('hidden');
+                sfx.playError();
+                return;
+            }
+
+            gameState.studentName = nameInput;
+            document.getElementById('display-student-name').textContent = nameInput;
+            document.getElementById('cert-student-name').textContent = nameInput.toUpperCase();
+
+            // Transición de pantalla
+            document.getElementById('screen-portada').classList.add('hidden');
+            document.getElementById('screen-escape').classList.remove('hidden');
+            
+            // Iniciar Audio
+            sfx.isMuted = false;
+            document.getElementById('sound-toggle-btn').innerHTML = '🔊 Sonido Activo';
+            sfx.startAmbient();
+            sfx.playUnlock();
+
+            // Iniciar Cronómetro
+            startTimer();
+        }
+
+        // CONTROL DEL TIEMPO
+        function startTimer() {
+            gameState.timeElapsed = 0;
+            gameState.timerInterval = setInterval(() => {
+                gameState.timeElapsed++;
+                const mins = Math.floor(gameState.timeElapsed / 60).toString().padStart(2, '0');
+                const secs = (gameState.timeElapsed % 60).toString().padStart(2, '0');
+                document.getElementById('game-timer').textContent = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const secs = (seconds % 60).toString().padStart(2, '0');
+            return `${mins}:${secs}`;
+        }
+
+        // SELECCIÓN Y APERTURA DE UNA SALA/ESTACIÓN
+        function selectRoom(roomId) {
+            if (gameState.solvedRooms.includes(roomId)) {
+                sfx.playSuccess();
+                return; 
+            }
+
+            sfx.playClick();
+            gameState.currentRoomId = roomId;
+            gameState.currentChallengeIndex = 0; // Reiniciar al primer reto
+            showRoomChallenge();
+        }
+
+        // MOSTRAR EL RETO ACTUAL EN EL MODAL DE LA ESTACIÓN
+        function showRoomChallenge() {
+            const roomId = gameState.currentRoomId;
+            const room = roomsData[roomId];
+            const challengeIdx = gameState.currentChallengeIndex;
+            const challenge = room.challenges[challengeIdx];
+
+            // Rellenar modal
+            document.getElementById('modal-room-indicator').textContent = `ESTACIÓN ${roomId}`;
+            document.getElementById('modal-room-title').textContent = room.title;
+            // Se actualizó a "de 4" en la interfaz
+            document.getElementById('modal-room-challenge-progress').textContent = `Reto ${challengeIdx + 1} de 4`;
+            document.getElementById('modal-room-scenario').textContent = challenge.scenario;
+            document.getElementById('modal-room-question').textContent = challenge.question;
+            
+            // Inyectar opciones
+            const optionsContainer = document.getElementById('modal-room-options');
+            optionsContainer.innerHTML = '';
+            
+            challenge.options.forEach((opt, idx) => {
+                const button = document.createElement('button');
+                button.className = "w-full text-left p-4 rounded-xl border border-slate-700 bg-slate-800 hover:bg-slate-700 hover:border-emerald-500 text-slate-200 transition text-base font-medium flex items-center gap-4";
+                button.onclick = () => selectOptionInModal(idx);
+                button.innerHTML = `
+                    <span class="w-7 h-7 rounded-full border border-slate-500 flex items-center justify-center font-bold text-sm shrink-0 select-none bg-slate-950 text-slate-400"></span>
+                    <span class="option-text">${opt}</span>
+                `;
+                button.setAttribute('data-index', idx);
+                optionsContainer.appendChild(button);
+            });
+
+            // Resetear estados del Modal
+            document.getElementById('modal-room-feedback').classList.add('hidden');
+            document.getElementById('modal-submit-btn').classList.remove('hidden');
+            
+            const nextBtn = document.getElementById('modal-next-challenge-btn');
+            nextBtn.classList.add('hidden');
+            nextBtn.onclick = nextRoomChallenge; // CORRECCIÓN: Restaura la función de avanzar al siguiente reto
+            
+            selectedOptionIdx = null;
+
+            // Mostrar modal
+            const modal = document.getElementById('room-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('modal-container').classList.remove('scale-95');
+            }, 10);
+        }
+
+        let selectedOptionIdx = null;
+
+        function selectOptionInModal(idx) {
+            sfx.playClick();
+            selectedOptionIdx = idx;
+            const options = document.querySelectorAll('#modal-room-options button');
+            options.forEach((btn, index) => {
+                const circle = btn.querySelector('span');
+                if (index === idx) {
+                    btn.classList.add('border-emerald-500', 'bg-emerald-500/10');
+                    circle.classList.add('bg-emerald-500', 'border-emerald-400', 'text-white');
+                } else {
+                    btn.classList.remove('border-emerald-500', 'bg-emerald-500/10');
+                    circle.classList.remove('bg-emerald-500', 'border-emerald-400', 'text-white');
+                }
+            });
+        }
+
+        // CONFIRMAR DIAGNÓSTICO EN MODAL (MANEJO DE 4 PREGUNTAS)
+        document.getElementById('modal-submit-btn').onclick = function() {
+            if (selectedOptionIdx === null) {
+                sfx.playError();
+                return;
+            }
+
+            const roomId = gameState.currentRoomId;
+            const room = roomsData[roomId];
+            const challengeIdx = gameState.currentChallengeIndex;
+            const challenge = room.challenges[challengeIdx];
+            
+            const feedbackEl = document.getElementById('modal-room-feedback');
+            const feedbackText = document.getElementById('modal-room-feedback-text');
+            const options = document.querySelectorAll('#modal-room-options button');
+
+            // Deshabilitar clicks adicionales en las opciones
+            options.forEach(btn => btn.disabled = true);
+
+            if (selectedOptionIdx === challenge.answer) {
+                sfx.playSuccess();
+                feedbackEl.className = "p-5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-base mt-4";
+                feedbackText.innerHTML = challenge.feedbackCorrect;
+                
+                document.getElementById('modal-submit-btn').classList.add('hidden');
+
+                // Lógica ajustada a 4 retos: los índices van de 0 a 3. Por lo tanto < 3 significa que quedan retos.
+                if (challengeIdx < 3) {
+                    // Hay más retos pendientes en esta estación
+                    const nextBtn = document.getElementById('modal-next-challenge-btn');
+                    nextBtn.classList.remove('hidden');
+                    nextBtn.textContent = `Ir al Reto ${challengeIdx + 2} ➔`;
+                    nextBtn.onclick = nextRoomChallenge; // CORRECCIÓN: Asegura que el botón avanza de reto
+                } else {
+                    // Ha completado el cuarto y último reto de la estación
+                    if (!gameState.solvedRooms.includes(roomId)) {
+                        gameState.solvedRooms.push(roomId);
+                    }
+
+                    // Actualizar UI del Mapa (SVG)
+                    document.getElementById(`status-dot-${roomId}`).setAttribute('fill', '#10b981'); 
+                    document.getElementById(`rect-room-${roomId}`).setAttribute('stroke', '#10b981');
+
+                    // Revelar el dígito recogido de la estación
+                    document.getElementById(`frag-val-${roomId}`).textContent = room.digit;
+                    document.getElementById(`frag-val-${roomId}`).classList.remove('text-slate-600');
+                    document.getElementById(`frag-val-${roomId}`).classList.add('text-emerald-400');
+                    document.getElementById(`frag-${roomId}`).classList.add('border-emerald-500/30', 'bg-emerald-500/5');
+
+                    // Actualizar Progreso Global
+                    const count = gameState.solvedRooms.length;
+                    document.getElementById('areas-count').textContent = `${count} / 4`;
+                    document.getElementById('areas-progress-bar').style.width = `${count * 25}%`;
+
+                    // Incrementar opacidad de flujo
+                    document.getElementById('active-flow').classList.remove('opacity-20');
+                    document.getElementById('active-flow').classList.add('opacity-70');
+
+                    // Si se resolvieron las 4 estancias completas, activar acceso a bóveda
+                    if (gameState.solvedRooms.length === 4) {
+                        const vaultBtn = document.getElementById('vault-access-btn');
+                        vaultBtn.disabled = false;
+                        vaultBtn.className = "w-full mt-6 py-4 rounded-xl text-center font-mono font-bold uppercase text-xs tracking-wider bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-slate-950 shadow-lg hover:shadow-amber-500/20 transform hover:-translate-y-0.5 transition";
+                        vaultBtn.innerHTML = "🔓 INGRESAR CÓDIGO MAESTRO";
+                        
+                        // Desbloquear visualmente bóveda en mapa
+                        document.getElementById('map-vault').classList.remove('pointer-events-none', 'opacity-50');
+                        document.getElementById('map-vault').classList.add('cursor-pointer');
+                        document.getElementById('map-vault').setAttribute('onclick', 'openMasterConsole()');
+                        document.getElementById('vault-box').setAttribute('stroke', '#f59e0b');
+                        document.getElementById('vault-circle').setAttribute('stroke', '#f59e0b');
+                        document.getElementById('vault-status-text').textContent = "Bóveda Desbloqueada";
+                        document.getElementById('vault-status-text').setAttribute('fill', '#f59e0b');
+                    }
+
+                    // Botón para cerrar y guardar éxito (te regresa al mapa)
+                    const nextBtn = document.getElementById('modal-next-challenge-btn');
+                    nextBtn.classList.remove('hidden');
+                    nextBtn.textContent = "Estación Completada ✓";
+                    nextBtn.onclick = function() {
+                        sfx.playUnlock();
+                        closeRoomModal(); // Este comando cierra el modal y te deja ver la pantalla de escape.
+                    };
+                }
+
+            } else {
+                sfx.playError();
+                feedbackEl.className = "p-5 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-400 text-base mt-4 animate-bounce";
+                feedbackText.innerHTML = challenge.feedbackIncorrect;
+                // Permitir reintentar reactivando las opciones
+                setTimeout(() => {
+                    options.forEach(btn => btn.disabled = false);
+                }, 1000);
+            }
+
+            feedbackEl.classList.remove('hidden');
+        };
+
+        function nextRoomChallenge() {
+            sfx.playClick();
+            gameState.currentChallengeIndex++;
+            showRoomChallenge();
+        }
+
+        // Función encargada de ocultar el popup y regresar al mapa principal de la planta
+        function closeRoomModal() {
+            document.getElementById('modal-container').classList.add('scale-95');
+            setTimeout(() => {
+                document.getElementById('room-modal').classList.add('hidden');
+                selectedOptionIdx = null;
+            }, 150);
+        }
+
+        // PANTALLA: CONSOLA DE BÓVEDA MAESTRA (4 DÍGITO AJUSTADO)
+        function openMasterConsole() {
+            sfx.playClick();
+            document.getElementById('screen-escape').classList.add('hidden');
+            document.getElementById('screen-terminal').classList.remove('hidden');
+            clearKeys();
+        }
+
+        function backToMap() {
+            sfx.playClick();
+            document.getElementById('screen-terminal').classList.add('hidden');
+            document.getElementById('screen-escape').classList.remove('hidden');
+        }
+
+        // Entrada del código teclado numérico para 4 dígitos exactos
+        function pressKey(num) {
+            sfx.playClick();
+            if (gameState.codeEntered.length >= 4) return;
+            gameState.codeEntered += num;
+            updateDigitDisplay();
+        }
+
+        function clearKeys() {
+            sfx.playClick();
+            gameState.codeEntered = "";
+            updateDigitDisplay();
+            document.getElementById('terminal-feedback').classList.add('hidden');
+        }
+
+        function updateDigitDisplay() {
+            for (let i = 1; i <= 4; i++) {
+                const digitBox = document.getElementById(`code-digit-${i}`);
+                if (digitBox) {
+                    const char = gameState.codeEntered[i - 1];
+                    digitBox.textContent = char ? char : "_";
+                    digitBox.className = char ? "h-20 rounded-xl bg-slate-950 border-2 border-emerald-500 text-4xl font-mono font-bold text-emerald-400 flex items-center justify-center shadow-lg shadow-emerald-500/10" : "h-20 rounded-xl bg-slate-950 border-2 border-slate-800 text-4xl font-mono font-bold text-slate-500 flex items-center justify-center";
+                }
+            }
+        }
+
+        // VALIDACIÓN DE LA BÓVEDA (4 DÍGITOS MAESTROS: 5153)
+        function unlockVault() {
+            const feedback = document.getElementById('terminal-feedback');
+            if (gameState.codeEntered === gameState.masterCode) {
+                sfx.playUnlock();
+                feedback.className = "mt-4 text-base font-bold font-mono text-emerald-400 block";
+                feedback.innerHTML = "🔓 SECUENCIA CORRECTA. DESCOMPRIMIENDO BÓVEDA. ACCEDIENDO AL SISTEMA DE AUDITORÍA... ACCESO CONCEDIDO.";
+                
+                setTimeout(() => {
+                    // Transición a la pantalla del Quiz final
+                    document.getElementById('screen-terminal').classList.add('hidden');
+                    document.getElementById('screen-quiz').classList.remove('hidden');
+                    initQuiz();
+                }, 2500);
+
+            } else {
+                sfx.playError();
+                feedback.className = "mt-4 text-base font-bold font-mono text-rose-400 block animate-pulse";
+                feedback.innerHTML = "❌ ERROR: CÓDIGO INCORRECTO. REVISE LOS CONCEPTOS (5 Principios, 10 Derroches (Primer dígito = 1), 5S, 3 Pilares).";
+                gameState.codeEntered = "";
+                setTimeout(() => {
+                    updateDigitDisplay();
+                }, 1000);
+            }
+        }
+
+        // PANTALLA DE AUDITORÍA DE MEJORA CONTINUA (QUIZ)
+        function initQuiz() {
+            gameState.quizCurrentIndex = 0;
+            gameState.quizScore = 0;
+            gameState.quizAnswersRecord = [];
+            showQuizQuestion();
+        }
+
+        function showQuizQuestion() {
+            const questionIdx = gameState.quizCurrentIndex;
+            const q = quizQuestions[questionIdx];
+
+            // Actualizar encabezado y barra de progreso
+            document.getElementById('quiz-question-counter').textContent = `${questionIdx + 1} / ${quizQuestions.length}`;
+            const progressPct = ((questionIdx + 1) / quizQuestions.length) * 100;
+            document.getElementById('quiz-progress-bar').style.width = `${progressPct}%`;
+
+            // Resetear feedback y botón de siguiente
+            document.getElementById('quiz-feedback').classList.add('hidden');
+            document.getElementById('quiz-next-btn').classList.add('hidden');
+
+            // Inyectar texto de pregunta
+            document.getElementById('quiz-question-text').textContent = q.q;
+
+            // Inyectar opciones
+            const optionsContainer = document.getElementById('quiz-options-container');
+            optionsContainer.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4.5 rounded-xl border border-slate-700 bg-slate-800 hover:bg-slate-700 hover:border-blue-500 text-slate-100 transition text-base md:text-lg font-medium flex items-center gap-4";
+                btn.onclick = () => evaluateQuizAnswer(idx);
+                btn.innerHTML = `
+                    <span class="w-7 h-7 rounded-full border border-slate-500 flex items-center justify-center font-bold text-sm shrink-0 select-none bg-slate-950 text-slate-400"></span>
+                    <span>${opt}</span>
+                `;
+                btn.setAttribute('data-index', idx);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function evaluateQuizAnswer(selectedIdx) {
+            const q = quizQuestions[gameState.quizCurrentIndex];
+            const options = document.querySelectorAll('#quiz-options-container button');
+            const feedbackEl = document.getElementById('quiz-feedback');
+            const feedbackText = document.getElementById('quiz-feedback-text');
+            const nextBtn = document.getElementById('quiz-next-btn');
+
+            options.forEach(btn => btn.disabled = true);
+
+            const isCorrect = selectedIdx === q.answer;
+            if (isCorrect) {
+                sfx.playSuccess();
+                gameState.quizScore++;
+                gameState.quizAnswersRecord.push(true);
+                feedbackEl.className = "p-5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 mt-4 text-base";
+                feedbackText.innerHTML = `<strong>¡Correcto!</strong> ${q.feedback}`;
+            } else {
+                sfx.playError();
+                gameState.quizAnswersRecord.push(false);
+                feedbackEl.className = "p-5 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-400 mt-4 text-base";
+                feedbackText.innerHTML = `<strong>Incorrecto.</strong> ${q.feedback}`;
+            }
+
+            options.forEach((btn, idx) => {
+                const circle = btn.querySelector('span');
+                if (idx === q.answer) {
+                    btn.className = "w-full text-left p-4.5 rounded-xl border border-emerald-500 bg-emerald-500/10 text-emerald-400 transition text-base md:text-lg font-medium flex items-center gap-4";
+                    circle.className = "w-7 h-7 rounded-full border border-emerald-400 bg-emerald-500 flex items-center justify-center font-bold text-sm shrink-0 select-none text-white";
+                    circle.innerHTML = "✓";
+                } else if (idx === selectedIdx) {
+                    btn.className = "w-full text-left p-4.5 rounded-xl border border-rose-500 bg-rose-500/10 text-rose-400 transition text-base md:text-lg font-medium flex items-center gap-4";
+                    circle.className = "w-7 h-7 rounded-full border border-rose-400 bg-rose-500 flex items-center justify-center font-bold text-sm shrink-0 select-none text-white";
+                    circle.innerHTML = "✕";
+                }
+            });
+
+            feedbackEl.classList.remove('hidden');
+            nextBtn.classList.remove('hidden');
+        }
+
+        function nextQuizQuestion() {
+            sfx.playClick();
+            if (gameState.quizCurrentIndex < quizQuestions.length - 1) {
+                gameState.quizCurrentIndex++;
+                showQuizQuestion();
+            } else {
+                clearInterval(gameState.timerInterval);
+                document.getElementById('screen-quiz').classList.add('hidden');
+                document.getElementById('screen-victory').classList.remove('hidden');
+                showVictoryMetrics();
+            }
+        }
+
+        function showVictoryMetrics() {
+            sfx.playUnlock();
+            const correct = gameState.quizScore;
+            const total = quizQuestions.length;
+            const pct = Math.round((correct / total) * 100);
+
+            document.getElementById('victory-score-pct').textContent = `${pct}%`;
+            document.getElementById('victory-correct-count').textContent = correct;
+            document.getElementById('victory-incorrect-count').textContent = total - correct;
+            document.getElementById('victory-total-time').textContent = formatTime(gameState.timeElapsed);
+
+            document.getElementById('cert-score-display').textContent = `Nota: ${pct}/100`;
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            document.getElementById('cert-date-display').textContent = `Fecha: ${dateStr}`;
+
+            let badgeTitle = "";
+            let stars = "";
+
+            if (pct >= 90) {
+                badgeTitle = "Excelente (Líder Lean Kaizen) 🏆";
+                stars = "⭐⭐⭐⭐⭐";
+            } else if (pct >= 70) {
+                badgeTitle = "Muy Bien (Auditor de Calidad) 👍";
+                stars = "⭐⭐⭐⭐";
+            } else if (pct >= 50) {
+                badgeTitle = "Aceptable (Ingeniero Junior) 👌";
+                stars = "⭐⭐⭐";
+            } else {
+                badgeTitle = "Debes Reforzar (Revisión Necesaria) 📚";
+                stars = "⭐⭐";
+            }
+
+            document.getElementById('victory-badge-title').textContent = badgeTitle;
+            document.getElementById('victory-badge-stars').textContent = stars;
+        }
+
+        function printCertificate() {
+            sfx.playClick();
+            window.print();
+        }
+
+        function resetGame() {
+            location.reload();
+        }
+
+        function toggleTheme() {
+            sfx.playClick();
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                document.body.className = "bg-slate-100 text-slate-800 font-sans min-h-screen transition-colors duration-300";
+            } else {
+                html.classList.add('dark');
+                document.body.className = "bg-slate-950 text-slate-100 font-sans min-h-screen transition-colors duration-300";
+            }
+        }
+    </script>
+</body>
+</html>
